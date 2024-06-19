@@ -5,10 +5,9 @@ from database import Base
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, nullable=False)
-    email = Column(String, unique=True, nullable=False)
-    name = Column(String, nullable=False)
-    password = Column(String, nullable=False)
+    username = Column(String(50), primary_key=True, unique=True, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    name = Column(String(100), nullable=False)
+    password = Column(String(100), nullable=False)
 
 
