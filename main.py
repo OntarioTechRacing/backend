@@ -22,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class UserBase(BaseModel):
     username: str
     email: str
@@ -47,11 +48,15 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 @app.post("/signup/", status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserBase, db: db_dependency):
-    db_user = db.query(models.User).filter(models.User.username == user.username).first()
+    db_user = (
+        db.query(models.User)
+        .filter(models.User.username == user.username)
+        .first()
+    )
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered"
+            detail="Username already registered",
         )
     db_user = models.User(**user.dict())
     db.add(db_user)
@@ -67,7 +72,11 @@ async def get_users(db: db_dependency):
 
 @app.post("/login/")
 async def login(user: UserLogin, db: db_dependency):
-    db_user = db.query(models.User).filter(models.User.username == user.username).first()
+    db_user = (
+        db.query(models.User)
+        .filter(models.User.username == user.username)
+        .first()
+    )
     if db_user is None or db_user.password != user.password:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -78,15 +87,17 @@ async def login(user: UserLogin, db: db_dependency):
 
 @app.delete("/users/{username}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(username: str, db: db_dependency):
-    db_user = db.query(models.User).filter(models.User.username == username).first()
+    db_user = (
+        db.query(models.User).filter(models.User.username == username).first()
+    )
     if db_user is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
     db.delete(db_user)
     db.commit()
     return {"msg": "User deleted successfully"}
+
 
 @app.get("/")
 def read_root():
