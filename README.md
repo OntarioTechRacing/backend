@@ -1,6 +1,6 @@
 # backend
 
-![black-formatter](https://github.com/OntarioTechRacing/backend/actions/workflows/black-formatter.yml/badge.svg)
+![black-formatter](https://github.com/OntarioTechRacing/backend/actions/workflows/black-formatter.yaml/badge.svg)
 
 Backend endpoints for technical work built using FastAPI.
 
